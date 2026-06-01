@@ -99,7 +99,7 @@ app.get('*', async (ctx) => {
   return ctx.notFound()
 })
 
-const hostname = process.env.MINIO_CDN_HOST || '127.0.0.1'
+const hostname = process.env.MINIO_CDN_HOST || process.env.HOST || '127.0.0.1'
 const port = parseInt(process.env.MINIO_CDN_PORT || process.env.PORT || '3000')
 
 console.log(`Running at http://${hostname}:${port}`)
