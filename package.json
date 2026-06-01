@@ -1,6 +1,6 @@
 {
   "name": "minio-cdn",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Serve S3 MinIO files like Cloudflare R2",
   "module": "src/app.ts",
   "type": "module",
