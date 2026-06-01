@@ -15,5 +15,4 @@ COPY static static
 ENV NODE_ENV=production
 EXPOSE 3000/tcp
 
-HEALTHCHECK --interval=5s --timeout=10s --retries=3 CMD ["/usr/local/bin/bun", "src/healthcheck.ts"]
 CMD ["src/app.ts"]
