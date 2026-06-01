@@ -1,7 +1,7 @@
-import { Readable } from 'stream'
 import type { Context, Env } from 'hono'
 import type { BucketItemStat, Client } from 'minio'
 import type { StatusCode } from 'hono/utils/http-status'
+import { LRUCache } from 'lru-cache'
 
 export const serveStatic = (ctx: Context<Env, any, {}>, path: string, status: StatusCode = 200) => {
   const file = Bun.file(`./static/${path}`)
@@ -12,33 +12,49 @@ export const serveStatic = (ctx: Context<Env, any, {}>, path: string, status: St
   return ctx.body(file.stream())
 }
 
-const toStream = (readable: Readable) => {
-  return new ReadableStream({
-    start(controller) {
-      readable.on('data', (chunk) => controller.enqueue(chunk))
-      readable.on('end', () => controller.close())
-      readable.on('error', (err) => controller.error(err))
-    },
-    cancel() {
-      readable.destroy()
-    },
-  })
+type CachedObject = {
+  stat: BucketItemStat
+  buffer: Buffer
 }
+
+const cache = new LRUCache<string, CachedObject>({
+  max: parseInt(process.env.CACHE_MAX_ITEMS || '500'),
+  maxSize: parseInt(process.env.CACHE_MAX_SIZE_MB || '50') * 1024 * 1024,
+  sizeCalculation: (value) => value.buffer.length,
+  ttl: parseInt(process.env.CACHE_TTL_SEC || '3600') * 1000,
+})
 
 export const getObject = async (
   minio: Client,
   bucket: string,
-  object: string
-): Promise<{ stat: BucketItemStat; stream: ReadableStream }> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const stat = await minio.statObject(bucket, object)
-      const readable = await minio.getObject(bucket, object)
-      const stream = toStream(readable)
+  object: string,
+  retry = 1
+): Promise<{ stat: BucketItemStat; stream: ReadableStream | Buffer }> => {
+  const cacheKey = `${bucket}:${object}`
+  const cached = cache.get(cacheKey)
 
-      resolve({ stat, stream })
-    } catch (error) {
-      reject(error)
+  if (cached) {
+    return { stat: cached.stat, stream: cached.buffer }
+  }
+
+  try {
+    const stat = await minio.statObject(bucket, object)
+    const readable = await minio.getObject(bucket, object)
+
+    const chunks = []
+    for await (const chunk of readable) {
+      chunks.push(chunk)
     }
-  })
+    const buffer = Buffer.concat(chunks)
+
+    cache.set(cacheKey, { stat, buffer })
+
+    return { stat, stream: buffer }
+  } catch (error: any) {
+    if (retry > 0 && error.code === 'AccessDenied') {
+      console.log(`Retrying object fetch for "${object}" due to AccessDenied...`)
+      return getObject(minio, bucket, object, retry - 1)
+    }
+    throw error
+  }
 }

@@ -22,7 +22,7 @@
     "url": "git+https://github.com/sooluh/minio-cdn.git"
   },
   "author": {
-    "name": "Abu Masyail",
+    "name": "Suluh Sulistiawan",
     "email": "suluhs@aol.com",
     "url": "https://suluh.my.id"
   },
@@ -32,15 +32,16 @@
   },
   "homepage": "https://github.com/sooluh/minio-cdn",
   "devDependencies": {
-    "@types/bun": "latest",
+    "@types/bun": "^1.3.14",
     "@types/minio": "^7.1.1",
-    "prettier": "^3.3.0"
+    "prettier": "^3.8.3"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
-    "hono": "^4.4.3",
-    "minio": "^8.0.0"
+    "hono": "^4.12.23",
+    "lru-cache": "^11.5.1",
+    "minio": "^8.0.7"
   }
 }

@@ -3,68 +3,69 @@
 Serve S3 MinIO files like Cloudflare R2.<br>
 It's very lightweight and fast, powered by [Bun](https://bun.sh).
 
+## Features
+
+- **Brutal Caching**: Dual-layer caching (Browser/CDN & In-Memory LRU Cache).
+- **Multi-Bucket Support**: Serve files from a specific bucket or all buckets.
+- **Auto-Retry**: Automatically handles transient `AccessDenied` errors on initial access.
+- **Lightweight**: Built with Hono and Bun for maximum performance.
+
 ## Requirements
 
-- Bun `>= 1.1.x`
+- Bun `>= 1.3.x`
 
 ## Getting Started
 
 1. Clone this repository
+2. Install dependencies: `bun install`
+3. Copy `.env.example` to `.env` and fill the variables.
+4. Run it: `bun src/app.ts`
 
-   ```bash
-   git clone https://github.com/sooluh/minio-cdn.git
-   ```
+## Environment Variables
 
-2. Move to the repository dir
+| Variable              | Default                               | Description                                 |
+| --------------------- | ------------------------------------- | ------------------------------------------- |
+| `MINIO_ENDPOINT`      | -                                     | MinIO/S3 Endpoint                           |
+| `MINIO_PORT`          | -                                     | MinIO/S3 Port                               |
+| `MINIO_ACCESS_KEY`    | -                                     | MinIO Access Key                            |
+| `MINIO_SECRET_KEY`    | -                                     | MinIO Secret Key                            |
+| `MINIO_BUCKET_NAME`   | `*`                                   | Bucket name. Use `*` for multi-bucket mode. |
+| `MINIO_REGION`        | `auto`                                | MinIO Region (e.g., `us-east-1`)            |
+| `MINIO_USE_SSL`       | `false`                               | Use SSL for MinIO connection                |
+| `MINIO_PATH_STYLE`    | `true`                                | Use path-style access for MinIO             |
+| `MINIO_CACHE_CONTROL` | `public, max-age=31536000, immutable` | Browser/CDN Cache header                    |
+| `MINIO_CDN_HOST`      | `127.0.0.1`                           | CDN Server Host                             |
+| `MINIO_CDN_PORT`      | `3000`                                | CDN Server Port                             |
+| `CACHE_MAX_ITEMS`     | `500`                                 | Max items in memory cache                   |
+| `CACHE_MAX_SIZE_MB`   | `50`                                  | Max RAM usage for cache in MB               |
+| `CACHE_TTL_SEC`       | `3600`                                | In-memory cache TTL in seconds              |
 
-   ```bash
-   cd minio-cdn
-   ```
+## Multi-Bucket Mode
 
-3. Install dependencies
+When `MINIO_BUCKET_NAME` is set to `*`, the application expects the first segment of the path to be the bucket name:
 
-   ```bash
-   bun install
-   ```
+- `http://localhost:3000/my-bucket/image.jpg` -> serves `image.jpg` from `my-bucket`.
 
-4. Run it!
+## Docker
 
-   ```bash
-   bun src/app.ts
-   ```
+```bash
+docker run -d \
+  -e MINIO_ACCESS_KEY='...' \
+  -e MINIO_SECRET_KEY='...' \
+  -e MINIO_BUCKET_NAME='*' \
+  -e MINIO_ENDPOINT='s3.example.com' \
+  -p 3000:3000 \
+  ghcr.io/sooluh/minio-cdn:latest
+```
 
-   Need a [watch mode](https://bun.sh/docs/runtime/hot) (hot reload) that's super fast?
+### Docker Compose
 
-   ```bash
-   bun --watch src/app.ts
-   ```
+You can also use Docker Compose. See [docker-compose.example.yml](docker-compose.example.yml) for reference.
 
-### Docker
-
-1. Build image
-
-   ```bash
-   docker build -t minio-cdn .
-   ```
-
-2. Run it!
-
-   ```bash
-   docker run -d \
-    -e MINIO_ACCESS_KEY='' \
-    -e MINIO_SECRET_KEY='' \
-    -e MINIO_BUCKET_NAME='app'
-    -e MINIO_ENDPOINT='10.10.20.1' \
-    -e MINIO_PORT='9000' \
-    -e MINIO_USE_SSL='false' \
-    -p 3000:3000 \
-    minio-cdn
-   ```
+```bash
+docker compose up -d
+```
 
 ## License
 
-This project is licensed under [MIT License](https://github.com/sooluh/minio-cdn/blob/main/LICENSE).
-
-## Discalimer
-
-This project is not officially maintained by MinIO. [MinIO trademarks and logo](https://min.io/logo) are the property of MinIO, Inc.
+This project is licensed under [MIT License](LICENSE).
