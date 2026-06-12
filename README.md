@@ -55,12 +55,12 @@ docker run -d \
   -e MINIO_BUCKET_NAME='*' \
   -e MINIO_ENDPOINT='s3.example.com' \
   -p 3000:3000 \
-  ghcr.io/sooluh/minio-cdn:latest
+  ghcr.io/korfra/minio-cdn:latest
 ```
 
 ### Docker Compose
 
-You can also use Docker Compose. See [docker-compose.example.yml](docker-compose.example.yml) for reference.
+You can also use Docker Compose. See [compose.yml](compose.yml) for reference.
 
 ```bash
 docker compose up -d
