@@ -1,4 +1,4 @@
-# edgea
+# Edgea
 
 Serve S3 compatible files like Cloudflare R2.<br>
 It's very lightweight and fast, powered by [Bun](https://bun.sh).
