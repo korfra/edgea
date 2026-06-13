@@ -3,8 +3,8 @@ import http from 'node:http'
 http
   .request(
     {
-      hostname: process.env.MINIO_CDN_HOST || process.env.HOST || 'localhost',
-      port: parseInt(process.env.MINIO_CDN_PORT || process.env.PORT || '3000'),
+      hostname: process.env.CDN_HOST || process.env.HOST || 'localhost',
+      port: parseInt(process.env.CDN_PORT || process.env.PORT || '3000'),
       path: '/up',
       method: 'GET',
     },

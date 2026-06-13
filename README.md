@@ -1,6 +1,6 @@
-# MinIO CDN
+# Edgea
 
-Serve S3 MinIO files like Cloudflare R2.<br>
+Serve S3 compatible files like Cloudflare R2.<br>
 It's very lightweight and fast, powered by [Bun](https://bun.sh).
 
 ## Features
@@ -23,26 +23,26 @@ It's very lightweight and fast, powered by [Bun](https://bun.sh).
 
 ## Environment Variables
 
-| Variable              | Default                               | Description                                 |
-| --------------------- | ------------------------------------- | ------------------------------------------- |
-| `MINIO_ENDPOINT`      | -                                     | MinIO/S3 Endpoint                           |
-| `MINIO_PORT`          | -                                     | MinIO/S3 Port                               |
-| `MINIO_ACCESS_KEY`    | -                                     | MinIO Access Key                            |
-| `MINIO_SECRET_KEY`    | -                                     | MinIO Secret Key                            |
-| `MINIO_BUCKET_NAME`   | `*`                                   | Bucket name. Use `*` for multi-bucket mode. |
-| `MINIO_REGION`        | `auto`                                | MinIO Region (e.g., `us-east-1`)            |
-| `MINIO_USE_SSL`       | `false`                               | Use SSL for MinIO connection                |
-| `MINIO_PATH_STYLE`    | `true`                                | Use path-style access for MinIO             |
-| `MINIO_CACHE_CONTROL` | `public, max-age=31536000, immutable` | Browser/CDN Cache header                    |
-| `MINIO_CDN_HOST`      | `127.0.0.1`                           | CDN Server Host                             |
-| `MINIO_CDN_PORT`      | `3000`                                | CDN Server Port                             |
-| `CACHE_MAX_ITEMS`     | `500`                                 | Max items in memory cache                   |
-| `CACHE_MAX_SIZE_MB`   | `50`                                  | Max RAM usage for cache in MB               |
-| `CACHE_TTL_SEC`       | `3600`                                | In-memory cache TTL in seconds              |
+| Variable            | Default                               | Description                                 |
+| ------------------- | ------------------------------------- | ------------------------------------------- |
+| `S3_ENDPOINT`       | -                                     | S3 compatible Endpoint                      |
+| `S3_PORT`           | -                                     | S3 compatible Port                          |
+| `S3_ACCESS_KEY`     | -                                     | S3 compatible Access Key                    |
+| `S3_SECRET_KEY`     | -                                     | S3 compatible Secret Key                    |
+| `S3_BUCKET_NAME`    | `*`                                   | Bucket name. Use `*` for multi-bucket mode. |
+| `S3_REGION`         | `auto`                                | S3 compatible Region (e.g., `us-east-1`)    |
+| `S3_USE_SSL`        | `false`                               | Use SSL for S3 compatible connection        |
+| `S3_PATH_STYLE`     | `true`                                | Use path-style access for S3 compatible     |
+| `CDN_CACHE_CONTROL` | `public, max-age=31536000, immutable` | Browser/CDN Cache header                    |
+| `CDN_HOST`          | `127.0.0.1`                           | CDN Server Host                             |
+| `CDN_PORT`          | `3000`                                | CDN Server Port                             |
+| `CACHE_MAX_ITEMS`   | `500`                                 | Max items in memory cache                   |
+| `CACHE_MAX_SIZE_MB` | `50`                                  | Max RAM usage for cache in MB               |
+| `CACHE_TTL_SEC`     | `3600`                                | In-memory cache TTL in seconds              |
 
 ## Multi-Bucket Mode
 
-When `MINIO_BUCKET_NAME` is set to `*`, the application expects the first segment of the path to be the bucket name:
+When `S3_BUCKET_NAME` is set to `*`, the application expects the first segment of the path to be the bucket name:
 
 - `http://localhost:3000/my-bucket/image.jpg` -> serves `image.jpg` from `my-bucket`.
 
@@ -50,12 +50,12 @@ When `MINIO_BUCKET_NAME` is set to `*`, the application expects the first segmen
 
 ```bash
 docker run -d \
-  -e MINIO_ACCESS_KEY='...' \
-  -e MINIO_SECRET_KEY='...' \
-  -e MINIO_BUCKET_NAME='*' \
-  -e MINIO_ENDPOINT='s3.example.com' \
+  -e S3_ACCESS_KEY='...' \
+  -e S3_SECRET_KEY='...' \
+  -e S3_BUCKET_NAME='*' \
+  -e S3_ENDPOINT='s3.example.com' \
   -p 3000:3000 \
-  ghcr.io/korfra/minio-cdn:latest
+  ghcr.io/korfra/edgea:latest
 ```
 
 ### Docker Compose

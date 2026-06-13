@@ -1,21 +1,21 @@
 services:
-  minio-cdn:
-    image: ghcr.io/sooluh/minio-cdn:latest
-    container_name: minio-cdn
+  edgea:
+    image: ghcr.io/sooluh/edgea:latest
+    container_name: edgea
     restart: always
     ports:
       - '3000:3000'
     environment:
-      - MINIO_ENDPOINT=s3.example.com
-      - MINIO_PORT=443
-      - MINIO_ACCESS_KEY=your-access-key
-      - MINIO_SECRET_KEY=your-secret-key
-      - MINIO_BUCKET_NAME=*
-      - MINIO_USE_SSL=true
-      - MINIO_PATH_STYLE=true
-      - MINIO_CACHE_CONTROL=public, max-age=31536000, immutable
-      - MINIO_CDN_HOST=0.0.0.0
-      - MINIO_CDN_PORT=3000
+      - S3_ENDPOINT=s3.example.com
+      - S3_PORT=443
+      - S3_ACCESS_KEY=your-access-key
+      - S3_SECRET_KEY=your-secret-key
+      - S3_BUCKET_NAME=*
+      - S3_USE_SSL=true
+      - S3_PATH_STYLE=true
+      - CDN_CACHE_CONTROL=public, max-age=31536000, immutable
+      - CDN_HOST=0.0.0.0
+      - CDN_PORT=3000
       - CACHE_MAX_ITEMS=1000
       - CACHE_MAX_SIZE_MB=100
       - CACHE_TTL_SEC=3600

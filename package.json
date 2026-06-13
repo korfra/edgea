@@ -1,11 +1,12 @@
 {
-  "name": "minio-cdn",
+  "name": "edgea",
   "version": "1.0.1",
-  "description": "Serve S3 MinIO files like Cloudflare R2",
+  "description": "Serve S3 compatible files like Cloudflare R2",
   "module": "src/app.ts",
   "type": "module",
   "scripts": {
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "test": "bun test"
   },
   "prettier": {
     "trailingComma": "es5",
@@ -19,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/korfra/minio-cdn.git"
+    "url": "git+https://github.com/korfra/edgea.git"
   },
   "author": {
     "name": "Suluh Sulistiawan",
@@ -28,9 +29,9 @@
   },
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/korfra/minio-cdn/issues"
+    "url": "https://github.com/korfra/edgea/issues"
   },
-  "homepage": "https://github.com/korfra/minio-cdn",
+  "homepage": "https://github.com/korfra/edgea",
   "devDependencies": {
     "@types/bun": "^1.3.14",
     "@types/minio": "^7.1.1",
