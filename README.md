@@ -1,4 +1,4 @@
-# Edgea
+# <img src="static/edgea.png" alt="Edgea Logo" height="32" align="center" /> Edgea
 
 Serve S3 compatible files like Cloudflare R2.<br>
 It's very lightweight and fast, powered by [Bun](https://bun.sh).
