@@ -77,10 +77,13 @@ kubectl apply -f k8s.yml
 2. Install dependencies: `bun install`
 3. Copy `.env.example` to `.env` and fill the variables.
 4. Run tests to ensure everything is configured correctly:
+
    ```bash
    bun test
    ```
+
 5. Run the application locally:
+
    ```bash
    bun src/app.ts
    ```
