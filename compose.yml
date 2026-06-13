@@ -1,6 +1,6 @@
 services:
   edgea:
-    image: ghcr.io/sooluh/edgea:latest
+    image: ghcr.io/korfra/edgea:latest
     container_name: edgea
     restart: always
     ports:
