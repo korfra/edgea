@@ -1,6 +1,6 @@
 {
   "name": "edgea",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Serve S3 compatible files like Cloudflare R2",
   "module": "src/app.ts",
   "type": "module",
